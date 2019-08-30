@@ -1,13 +1,15 @@
 import api from '../../repository/api';
 
 const state = {
-  totalRevenueByDate: {},
+  totalRevenueByMonth: {},
   totalRevenueByMerchant: {},
 };
 
 const getters = {
-  allTotalRevenueByDate: (state) => state.totalRevenueByDate,
+  totalRevenueByMonth: (state) => state.totalRevenueByMonth,
   allTotalRevenueByMerchant: (state) => state.totalRevenueByMerchant,
+  allMerchants: (state) => Object.keys(state.totalRevenueByMerchant).filter((key => key !== 'null' && key !== 'merchant not identified')),
+  merchantTotalRevenue: (state) => merchant => state.totalRevenueByMerchant[merchant],
 };
 
 const actions = {

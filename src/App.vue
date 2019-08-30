@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <TotalRevenueManager />
+    <MerchantsList />
   </div>
 </template>
 
 <script>
-import TotalRevenueManager from './components/TotalRevenueManager.vue';
+import MerchantsList from './components/MerchantsList.vue';
 
 export default {
   name: 'app',
   components: {
-    TotalRevenueManager,
+    MerchantsList,
   },
 };
 </script>
