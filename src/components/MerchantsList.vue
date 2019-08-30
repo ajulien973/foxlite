@@ -3,10 +3,10 @@
     <h1 class="h1">Total Revenue</h1>
     <ul id="merchants">
       <li v-for="merchant in merchants">
-        {{ merchant }}
+        <a href="#" @click="selectMerchant(merchant)">{{ merchant }}</a>
       </li>
     </ul>
-    <MarketShareTable />
+    <MarketShareTable :currentMerchant=this.currentMerchant />
   </div>
 </template>
 
@@ -17,10 +17,18 @@ import MarketShareTable from './MarketShareTable.vue';
 export default {
   name: 'MerchantList',
   components: { MarketShareTable },
+  data: () => ({
+    currentMerchant: '',
+  }),
   computed: {
     ...mapGetters('totalRevenue', {
       merchants: 'allMerchants',
     }),
+  },
+  methods: {
+    selectMerchant(merchant) {
+      this.currentMerchant = merchant;
+    },
   },
   created() {
     this.$store.dispatch('totalRevenue/getTotalRevenueByMerchant');

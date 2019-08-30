@@ -5,7 +5,7 @@
       <td>Value</td>
     </thead>
     <tbody>
-      <tr v-for="item in getMerchantValuesFromStore('zalando')">
+      <tr v-for="item in this.merchantTotalRevenue(currentMerchant)">
         <td>{{item.monthLabel}}</td>
         <td>{{item.value}}</td>
       </tr>
@@ -18,14 +18,10 @@ import { mapGetters } from 'vuex';
 
 export default {
   name: 'MarketShareTable',
-  methods: {
-    getMerchantValuesFromStore(merchantName) {
-      return this.values(merchantName);
-    },
-  },
+  props: ['currentMerchant'],
   computed: {
     ...mapGetters('totalRevenue', {
-      values: 'merchantTotalRevenue',
+      merchantTotalRevenue: 'merchantTotalRevenue',
     }),
   },
 };
