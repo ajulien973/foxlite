@@ -1,29 +1,22 @@
 <template>
   <div class="container-fluid mt-4">
     <h1 class="h1">Total Revenue</h1>
-    {{totalRevenueByMerchant}}
+    {{totalRevenue}}
   </div>
 </template>
 
 <script>
-import api from '../repository/api';
+import { mapGetters } from 'vuex';
 
 export default {
-  data() {
-    return {
-      loading: false,
-      totalRevenueByMerchant: {},
-    };
+  name: 'TotalRevenueManager',
+  computed: {
+    ...mapGetters('totalRevenue', {
+      totalRevenue: 'allTotalRevenueByMerchant',
+    }),
   },
-  async created() {
-    this.refreshEntries();
-  },
-  methods: {
-    async refreshEntries() {
-      this.loading = true;
-      this.totalRevenueByMerchant = await api.getTotalRevenueByMerchant();
-      this.loading = false;
-    },
+  created() {
+    this.$store.dispatch('totalRevenue/getTotalRevenueByMerchant');
   },
 };
 </script>
