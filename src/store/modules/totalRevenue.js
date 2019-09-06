@@ -6,10 +6,10 @@ const state = {
 };
 
 const getters = {
-  totalRevenueByMonth: (state) => state.totalRevenueByMonth,
-  allTotalRevenueByMerchant: (state) => state.totalRevenueByMerchant,
-  allMerchants: (state) => Object.keys(state.totalRevenueByMerchant).filter((key => key !== 'null' && key !== 'merchant not identified')),
-  merchantTotalRevenue: (state) => merchant => state.totalRevenueByMerchant[merchant],
+  totalRevenueByMonth: state => state.totalRevenueByMonth,
+  allTotalRevenueByMerchant: state => state.totalRevenueByMerchant,
+  allMerchants: state => Object.keys(state.totalRevenueByMerchant).filter((key => key !== 'null' && key !== 'merchant not identified')),
+  merchantTotalRevenue: state => merchant => state.totalRevenueByMerchant[merchant],
 };
 
 const actions = {
@@ -21,17 +21,37 @@ const actions = {
   },
 };
 
+const computeTotalMonthShares = companies => companies.reduce(
+  (acc, company) => (acc + company.value),
+  0,
+);
+
+const formatMerchantShare = (merchantShare, totalMonthShares) => {
+  const merchantPercentShare = (merchantShare / totalMonthShares) * 100;
+  return `${Number(merchantPercentShare.toFixed(2))}%`;
+};
+
 const groupByMerchant = (dataByMonth) => {
   const dataByMerchant = {};
-
   dataByMonth.forEach((month) => {
-    const { label: monthLabel, values } = month;
-    values.forEach((company) => {
-      const { label: companyLabel, value } = company;
+    const {
+      label: monthLabel,
+      values: companies,
+    } = month;
+    const totalMonthShares = computeTotalMonthShares(companies);
+
+    companies.forEach((company) => {
+      const {
+        label: companyLabel,
+        value: merchantShares,
+      } = company;
+
       if (!dataByMerchant[companyLabel]) {
         dataByMerchant[companyLabel] = [];
       }
-      dataByMerchant[companyLabel].push({ monthLabel, value });
+
+      const merchantShare = formatMerchantShare(merchantShares, totalMonthShares);
+      dataByMerchant[companyLabel].push({ monthLabel, value: merchantShare });
     });
   });
   return dataByMerchant;
